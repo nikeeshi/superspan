@@ -1,0 +1,38 @@
+{
+  "name": "superspan",
+  "version": "0.0.1",
+  "description": "2020 summer hackathon",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env parcel ./index.html --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikeeshi/superspan.git"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "nikeeshi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nikeeshi/superspan/issues"
+  },
+  "homepage": "https://github.com/nikeeshi/superspan#readme",
+  "dependencies": {
+    "cross-env": "^7.0.2",
+    "parcel": "^1.12.4",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-links": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "babel-loader": "^8.1.0",
+    "typescript": "^3.9.7"
+  }
+}
