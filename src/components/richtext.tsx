@@ -1,33 +1,52 @@
 import * as React from "react";
-type Props = { children: string };
 
-const convertTextNodeToReactElement = (node: HTMLElement) => {
-  if (node.nodeName === "text") {
+const eatText = (node: ChildNode) => {
+  if (node.nodeName === "#text") {
     return node.textContent;
   }
 };
-const convertXmlNodeToReactElement = (node: HTMLElement) => {
+const eatXml = (node: ChildNode, registeredHRefs: Record<string, string>) => {
+  if (node.nodeName === "#text") return eatText(node);
   switch (node.nodeName) {
-    case "test":
-      return convertTextNodeToReactElement(node);
+    case "wrap":
     case "a":
-      return (
-        <a>{Array.from(node.childNodes).map(convertTextNodeToReactElement)}</a>
+    case "em":
+    case "strong":
+    case "del":
+    case "ins":
+      const children = Array.from(node.childNodes).map((child) =>
+        eatXml(child, registeredHRefs)
       );
+      switch (node.nodeName) {
+        case "wrap":
+          return children;
+        case "a":{
+          return <a>{children}</a>;}
+        case "em":
+          return <em>{children}</em>;
+        case "strong":
+          return <strong>{children}</strong>;
+        case "del":
+          return <del>{children}</del>;
+        case "ins":
+          return <ins>{children}</ins>;
+      }
+    case "html":
+      throw new Error(`Parse error`);
     default:
-      return;//TODO
+      throw new Error(`Unknown tag type:${node.nodeName}`);
   }
 };
 
-export const TextWithTags: React.FC<Props> = ({ children }) => {
-  const xml = new DOMParser().parseFromString(children, "text/xml");
+type Props = { children: string; registeredHRefs?: Record<string, string> };
+export const XMLText: React.FC<Props> = ({
+  children,
+  registeredHRefs = {},
+}) => {
+  const xml = new DOMParser().parseFromString(
+    "<wrap>" + children + "</wrap>",
+    "text/xml"
+  );
 
-  return convertXmlNodeToReactElement(xml.documentElement);
+  return <span>{eatXml(xml.documentElement, registeredHRefs)}</span>;
 };
-
-const xml = new DOMParser().parseFromString(
-  `
-<div>hoge<a>poyo</a></div>
-`,
-  "text/xml"
-);
