@@ -4,6 +4,7 @@ import { Router } from "./router";
 import { XMLText } from "./components/richtext";
 import { useState } from "react";
 import { useList } from "./hooks/useList";
+import { DisplayElement } from "./components/codeDisplay";
 
 let stories = [
   {
@@ -67,6 +68,24 @@ let stories = [
               />
             </div>,
           ]}
+          <div>
+            Code:
+            <DisplayElement
+              element={"XMLText"}
+              children={xml ? "{`" + xml + "`}" : ""}
+              attributes={
+                hrefs.state.length === 0
+                  ? []
+                  : [
+                      [
+                        "registeredHRefs",
+                        JSON.stringify(Object.fromEntries(hrefs.state)),
+                      ],
+                    ]
+              }
+            />
+          </div>
+          Result:
           <ErrorBoundary key={xml}>
             <XMLText registeredHRefs={Object.fromEntries(hrefs.state)}>
               {xml}
@@ -76,7 +95,6 @@ let stories = [
       );
     },
   },
-  { name: "A", element: <div>AAAAA</div> },
 ];
 
 class ErrorBoundary extends React.Component {
@@ -91,7 +109,6 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.error) {
-      // You can render any custom fallback UI
       return (
         <div>
           <details style={{ whiteSpace: "pre-wrap" }}>
