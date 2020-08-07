@@ -20,8 +20,12 @@ const eatXml = (node: ChildNode, registeredHRefs: Record<string, string>) => {
       switch (node.nodeName) {
         case "wrap":
           return children;
-        case "a":{
-          return <a>{children}</a>;}
+        case "a": {
+          const id = (node as Element).attributes.getNamedItem("id");
+          if (id && registeredHRefs[id.value])
+            return <a href={registeredHRefs[id.value]}>{children}</a>;
+          else return <a>{children}</a>;
+        }
         case "em":
           return <em>{children}</em>;
         case "strong":
